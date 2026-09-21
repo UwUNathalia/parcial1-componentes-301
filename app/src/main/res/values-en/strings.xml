@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- English translations -->
+<resources>
+    <string name="app_name">NotaViva</string>
+    <string name="app_tagline">Stories that matter</string>
+
+    <!-- Home screen -->
+    <string name="greeting_title">Hello, journalist</string>
+    <string name="greeting_subtitle">Organize your interviews, build your stories.</string>
+    <string name="home_new_case">New case</string>
+    <string name="home_new_case_hint">Start a new investigation</string>
+    <string name="home_my_cases">My cases</string>
+    <string name="home_my_cases_hint">Review and manage your investigations</string>
+    <string name="home_stats">Statistics</string>
+    <string name="home_stats_hint">Interviews, cases and progress</string>
+    <string name="home_open_cases">Open cases</string>
+    <string name="home_total_cases">Cases</string>
+    <string name="home_total_interviews">Interviews</string>
+
+    <!-- Navigation -->
+    <string name="nav_home">Home</string>
+    <string name="nav_cases">Cases</string>
+    <string name="action_back">Back</string>
+
+    <!-- Case list -->
+    <string name="cases_title">My cases</string>
+    <string name="cases_search_hint">Search by title, topic or source…</string>
+    <string name="cases_filter_all">All</string>
+    <string name="cases_empty_title">No cases yet</string>
+    <string name="cases_empty_message">Create your first case to start recording interviews.</string>
+    <string name="cases_no_results_title">No results</string>
+    <string name="cases_no_results_message">No case matches your search.</string>
+    <string name="cases_interviews_count">%1$d interviews</string>
+    <string name="cases_interviews_count_one">1 interview</string>
+
+    <!-- States -->
+    <string name="state_investigating">Investigating</string>
+    <string name="state_editing">Editing</string>
+    <string name="state_published">Published</string>
+    <string name="state_closed">Closed</string>
+
+    <!-- Case form -->
+    <string name="form_new_title">New case</string>
+    <string name="form_edit_title">Edit case</string>
+    <string name="form_field_title">Title</string>
+    <string name="form_field_description">Description</string>
+    <string name="form_field_topic">Topic</string>
+    <string name="form_field_date">Date</string>
+    <string name="form_field_state">Status</string>
+    <string name="form_error_title_required">Title is required</string>
+    <string name="form_save">Save</string>
+    <string name="form_cancel">Cancel</string>
+    <string name="form_saved">Case saved</string>
+
+    <!-- Case detail -->
+    <string name="detail_tab_summary">Summary</string>
+    <string name="detail_tab_interviews">Interviews</string>
+    <string name="detail_tab_conclusions">Conclusions</string>
+    <string name="detail_tab_evidence">Evidence</string>
+    <string name="detail_description">Description</string>
+    <string name="detail_no_description">No description.</string>
+    <string name="detail_change_state">Change status</string>
+    <string name="detail_close_case">Close case</string>
+    <string name="detail_reopen_case">Reopen case</string>
+    <string name="detail_case_closed_notice">This case is closed. Reopen it to add information.</string>
+    <string name="detail_edit">Edit</string>
+    <string name="detail_delete">Delete</string>
+
+    <!-- Interviews -->
+    <string name="interview_new">New interview</string>
+    <string name="interview_field_name">Source name</string>
+    <string name="interview_field_role">Role or position</string>
+    <string name="interview_field_findings">Key findings</string>
+    <string name="interview_field_anonymous">Anonymous source</string>
+    <string name="interview_anonymous">Anonymous interview</string>
+    <string name="interview_anonymous_role">Confidential source</string>
+    <string name="interview_empty">No interviews recorded yet.</string>
+    <string name="interview_no_findings">No findings recorded.</string>
+    <string name="interview_error_name">Enter the source name or mark it as anonymous</string>
+    <string name="interview_delete">Delete interview</string>
+
+    <!-- Conclusions -->
+    <string name="conclusion_title">Conclusion</string>
+    <string name="conclusion_empty">You have not written the conclusion yet.</string>
+    <string name="conclusion_hint">Write the conclusions of the investigation here…</string>
+    <string name="conclusion_saved">Conclusion saved</string>
+
+    <!-- Evidence -->
+    <string name="evidence_new">Add evidence</string>
+    <string name="evidence_field_name">File name</string>
+    <string name="evidence_field_size">Size in KB</string>
+    <string name="evidence_empty">No evidence recorded yet.</string>
+    <string name="evidence_error_name">Enter the file name</string>
+    <string name="evidence_delete">Delete evidence</string>
+
+    <!-- Dialogs -->
+    <string name="dialog_delete_case_title">Delete this case?</string>
+    <string name="dialog_delete_case_message">Its interviews and evidence will be deleted too. This cannot be undone.</string>
+    <string name="dialog_confirm">Delete</string>
+    <string name="dialog_add">Add</string>
+    <string name="dialog_save">Save</string>
+    <string name="dialog_cancel">Cancel</string>
+    <string name="case_deleted">Case deleted</string>
+</resources>

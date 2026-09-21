@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+
+    <!-- Hoja de la nota -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M38,31h32a3,3 0,0 1,3 3v40a3,3 0,0 1,-3 3h-32a3,3 0,0 1,-3 -3v-40a3,3 0,0 1,3 -3z" />
+
+    <!-- Lineas de texto -->
+    <path
+        android:fillColor="#2563EB"
+        android:pathData="M41.5,41h25a1.5,1.5 0,0 1,0 3h-25a1.5,1.5 0,0 1,0 -3z" />
+    <path
+        android:fillColor="#2563EB"
+        android:pathData="M41.5,49h25a1.5,1.5 0,0 1,0 3h-25a1.5,1.5 0,0 1,0 -3z" />
+    <path
+        android:fillColor="#2563EB"
+        android:pathData="M41.5,57h25a1.5,1.5 0,0 1,0 3h-25a1.5,1.5 0,0 1,0 -3z" />
+
+    <!-- Indicador de grabacion -->
+    <path
+        android:fillColor="#C83C3C"
+        android:pathData="M45,64.5m-4,0a4,4 0,1 1,8 0a4,4 0,1 1,-8 0" />
+    <path
+        android:fillColor="#2563EB"
+        android:pathData="M53,63h13a1.5,1.5 0,0 1,0 3h-13a1.5,1.5 0,0 1,0 -3z" />
+</vector>

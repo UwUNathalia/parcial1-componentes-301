@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- El tema visual real se define en Compose (ui/theme/Theme.kt).
+         Este estilo solo evita la ActionBar del sistema. -->
+    <style name="Theme.NotaViva" parent="android:Theme.Material.Light.NoActionBar" />
+</resources>

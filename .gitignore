@@ -1,0 +1,26 @@
+# --- Gradle ---
+.gradle/
+build/
+*/build/
+!gradle/wrapper/gradle-wrapper.jar
+
+# --- Android Studio / IntelliJ ---
+.idea/
+*.iml
+.kotlin/
+captures/
+.externalNativeBuild/
+.cxx/
+
+# --- Configuracion local (rutas del SDK, propias de cada maquina) ---
+local.properties
+
+# --- Salidas de compilacion ---
+*.apk
+*.aab
+*.ap_
+*.dex
+
+# --- Sistema operativo ---
+.DS_Store
+Thumbs.db

@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Idioma por defecto: espanol -->
+<resources>
+    <string name="app_name">NotaViva</string>
+    <string name="app_tagline">Historias que importan</string>
+
+    <!-- Pantalla de inicio -->
+    <string name="greeting_title">Hola, periodista</string>
+    <string name="greeting_subtitle">Organiza tus entrevistas, construye tus historias.</string>
+    <string name="home_new_case">Nuevo caso</string>
+    <string name="home_new_case_hint">Crea un nuevo tema de investigación</string>
+    <string name="home_my_cases">Mis casos</string>
+    <string name="home_my_cases_hint">Revisa y gestiona tus investigaciones</string>
+    <string name="home_stats">Estadísticas</string>
+    <string name="home_stats_hint">Entrevistas, casos y avances</string>
+    <string name="home_open_cases">Casos abiertos</string>
+    <string name="home_total_cases">Casos</string>
+    <string name="home_total_interviews">Entrevistas</string>
+
+    <!-- Navegación -->
+    <string name="nav_home">Inicio</string>
+    <string name="nav_cases">Casos</string>
+    <string name="action_back">Volver</string>
+
+    <!-- Listado de casos -->
+    <string name="cases_title">Mis casos</string>
+    <string name="cases_search_hint">Buscar por título, tema o fuente…</string>
+    <string name="cases_filter_all">Todos</string>
+    <string name="cases_empty_title">Todavía no hay casos</string>
+    <string name="cases_empty_message">Crea tu primer caso para empezar a registrar entrevistas.</string>
+    <string name="cases_no_results_title">Sin resultados</string>
+    <string name="cases_no_results_message">Ningún caso coincide con la búsqueda.</string>
+    <string name="cases_interviews_count">%1$d entrevistas</string>
+    <string name="cases_interviews_count_one">1 entrevista</string>
+
+    <!-- Estados -->
+    <string name="state_investigating">En investigación</string>
+    <string name="state_editing">En edición</string>
+    <string name="state_published">Publicado</string>
+    <string name="state_closed">Cerrado</string>
+
+    <!-- Formulario de caso -->
+    <string name="form_new_title">Nuevo caso</string>
+    <string name="form_edit_title">Editar caso</string>
+    <string name="form_field_title">Título</string>
+    <string name="form_field_description">Descripción</string>
+    <string name="form_field_topic">Tema</string>
+    <string name="form_field_date">Fecha</string>
+    <string name="form_field_state">Estado</string>
+    <string name="form_error_title_required">El título es obligatorio</string>
+    <string name="form_save">Guardar</string>
+    <string name="form_cancel">Cancelar</string>
+    <string name="form_saved">Caso guardado</string>
+
+    <!-- Detalle del caso -->
+    <string name="detail_tab_summary">Resumen</string>
+    <string name="detail_tab_interviews">Entrevistas</string>
+    <string name="detail_tab_conclusions">Conclusiones</string>
+    <string name="detail_tab_evidence">Evidencias</string>
+    <string name="detail_description">Descripción</string>
+    <string name="detail_no_description">Sin descripción.</string>
+    <string name="detail_change_state">Cambiar estado</string>
+    <string name="detail_close_case">Cerrar caso</string>
+    <string name="detail_reopen_case">Reabrir caso</string>
+    <string name="detail_case_closed_notice">El caso está cerrado. Reábrelo para agregar información.</string>
+    <string name="detail_edit">Editar</string>
+    <string name="detail_delete">Eliminar</string>
+
+    <!-- Entrevistas -->
+    <string name="interview_new">Nueva entrevista</string>
+    <string name="interview_field_name">Nombre de la fuente</string>
+    <string name="interview_field_role">Rol o cargo</string>
+    <string name="interview_field_findings">Principales hallazgos</string>
+    <string name="interview_field_anonymous">Fuente anónima</string>
+    <string name="interview_anonymous">Entrevista anónima</string>
+    <string name="interview_anonymous_role">Fuente confidencial</string>
+    <string name="interview_empty">Aún no hay entrevistas registradas.</string>
+    <string name="interview_no_findings">Sin hallazgos registrados.</string>
+    <string name="interview_error_name">Escribe el nombre de la fuente o márcala como anónima</string>
+    <string name="interview_delete">Eliminar entrevista</string>
+
+    <!-- Conclusiones -->
+    <string name="conclusion_title">Conclusión</string>
+    <string name="conclusion_empty">Aún no has escrito la conclusión del caso.</string>
+    <string name="conclusion_hint">Escribe aquí las conclusiones de la investigación…</string>
+    <string name="conclusion_saved">Conclusión guardada</string>
+
+    <!-- Evidencias -->
+    <string name="evidence_new">Agregar evidencia</string>
+    <string name="evidence_field_name">Nombre del archivo</string>
+    <string name="evidence_field_size">Tamaño en KB</string>
+    <string name="evidence_empty">Aún no hay evidencias registradas.</string>
+    <string name="evidence_error_name">Escribe el nombre del archivo</string>
+    <string name="evidence_delete">Eliminar evidencia</string>
+
+    <!-- Diálogos -->
+    <string name="dialog_delete_case_title">¿Eliminar el caso?</string>
+    <string name="dialog_delete_case_message">Se borrarán también sus entrevistas y evidencias. Esta acción no se puede deshacer.</string>
+    <string name="dialog_confirm">Eliminar</string>
+    <string name="dialog_add">Agregar</string>
+    <string name="dialog_save">Guardar</string>
+    <string name="dialog_cancel">Cancelar</string>
+    <string name="case_deleted">Caso eliminado</string>
+</resources>
