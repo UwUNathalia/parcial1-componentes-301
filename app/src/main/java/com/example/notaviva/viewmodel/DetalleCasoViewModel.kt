@@ -24,19 +24,10 @@ data class EstadoDetalleCaso(
     val mensaje: String? = null,
     val casoEliminado: Boolean = false
 ) {
-    /** Un caso cerrado no admite nuevas entrevistas ni evidencias. */
     val estaCerrado: Boolean
         get() = caso?.estado?.estaCerrado == true
 }
 
-/**
- * ViewModel del detalle: entrevistas, hallazgos, evidencias y conclusión.
- *
- * Todas las operaciones que pueden fallar por una regla de negocio (agregar
- * información a un caso cerrado, por ejemplo) se ejecutan dentro de un
- * `try/catch` y el mensaje de la excepción se muestra al usuario, en lugar de
- * dejar que la aplicación se cierre.
- */
 class DetalleCasoViewModel(
     private val repositorio: RepositorioCasos,
     private val casoId: Long
@@ -49,7 +40,6 @@ class DetalleCasoViewModel(
         cargar()
     }
 
-    /** Lee el caso con sus entrevistas y evidencias. */
     fun cargar() {
         viewModelScope.launch {
             _estado.update { it.copy(cargando = true) }
@@ -66,9 +56,6 @@ class DetalleCasoViewModel(
         }
     }
 
-    // --- Entrevistas ---
-
-    /** Registra una entrevista con sus hallazgos. */
     fun agregarEntrevista(
         nombre: String,
         rol: String,
@@ -90,19 +77,10 @@ class DetalleCasoViewModel(
         }
     }
 
-    /** Borra una entrevista del caso. */
     fun eliminarEntrevista(id: Long) {
         ejecutar { repositorio.eliminarEntrevista(id) }
     }
 
-    // --- Evidencias ---
-
-    /**
-     * Registra una evidencia.
-     *
-     * @param tamanoKb tamaño en kilobytes tal como lo escribió el usuario; se
-     *   convierte a bytes, que es como lo guarda el modelo.
-     */
     fun agregarEvidencia(nombre: String, tamanoKb: Long) {
         ejecutar {
             repositorio.guardarEvidencia(
@@ -116,43 +94,30 @@ class DetalleCasoViewModel(
         }
     }
 
-    /** Borra una evidencia del caso. */
     fun eliminarEvidencia(id: Long) {
         ejecutar { repositorio.eliminarEvidencia(id) }
     }
 
-    // --- Conclusión y estado ---
-
-    /** Actualiza el texto de la conclusión mientras el usuario escribe. */
     fun cambiarBorradorConclusion(texto: String) {
         _estado.update { it.copy(borradorConclusion = texto) }
     }
 
-    /** Guarda la conclusión en la base de datos. */
     fun guardarConclusion(mensajeExito: String) {
         ejecutar(mensajeExito) {
             repositorio.guardarConclusion(casoId, _estado.value.borradorConclusion)
         }
     }
 
-    /** Cambia el estado del caso. */
     fun cambiarEstado(estado: EstadoCaso) {
         ejecutar { repositorio.cambiarEstado(casoId, estado) }
     }
 
-    /**
-     * Cierra el caso, o lo reabre si ya estaba cerrado.
-     *
-     * Al reabrirlo vuelve a "en edición" y no a "en investigación", porque un
-     * caso que llegó a cerrarse ya pasó por la etapa de recolección.
-     */
     fun alternarCierre() {
         val actual = _estado.value.caso ?: return
         val nuevo = if (actual.estado.estaCerrado) EstadoCaso.EN_EDICION else EstadoCaso.CERRADO
         cambiarEstado(nuevo)
     }
 
-    /** Elimina el caso completo. La vista navega hacia atrás al terminar. */
     fun eliminarCaso() {
         viewModelScope.launch {
             repositorio.eliminarCaso(casoId)
@@ -160,17 +125,10 @@ class DetalleCasoViewModel(
         }
     }
 
-    /** Oculta el mensaje emergente una vez mostrado. */
     fun mensajeMostrado() {
         _estado.update { it.copy(mensaje = null) }
     }
 
-    /**
-     * Ejecuta una operación sobre el repositorio y vuelve a cargar la pantalla.
-     *
-     * Centraliza el manejo de errores: si una regla de negocio rechaza la
-     * operación, el mensaje se le muestra al usuario en vez de cerrar la app.
-     */
     private fun ejecutar(mensajeExito: String? = null, operacion: suspend () -> Unit) {
         viewModelScope.launch {
             try {

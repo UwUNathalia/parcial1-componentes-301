@@ -1,7 +1,10 @@
 package com.example.notaviva.ui.detail
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -10,6 +13,8 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AudioFile
@@ -17,6 +22,7 @@ import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Description
 import androidx.compose.material.icons.filled.Image
 import androidx.compose.material.icons.filled.InsertDriveFile
+import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.VideoFile
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
@@ -25,12 +31,16 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.example.notaviva.R
 import com.example.notaviva.domain.model.Entrevista
@@ -41,10 +51,7 @@ import com.example.notaviva.ui.components.formatoCorto
 import com.example.notaviva.viewmodel.EstadoDetalleCaso
 
 /**
- * Contenido de las pestañas del detalle.
- *
- * Están en un archivo aparte para que [PantallaDetalleCaso] se ocupe solo de
- * la estructura (barra, pestañas, diálogos) y no crezca sin control.
+ * Contenido de las pestañas del detalle con la estética unificada de NotaViva.
  */
 
 /** Lista de entrevistas del caso con sus hallazgos. */
@@ -63,8 +70,8 @@ fun PestanaEntrevistas(
 
     LazyColumn(
         modifier = Modifier.fillMaxSize(),
-        contentPadding = androidx.compose.foundation.layout.PaddingValues(16.dp),
-        verticalArrangement = Arrangement.spacedBy(10.dp)
+        contentPadding = PaddingValues(16.dp),
+        verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
         items(items = estado.entrevistas, key = { it.id }) { entrevista ->
             TarjetaEntrevista(
@@ -76,7 +83,7 @@ fun PestanaEntrevistas(
     }
 }
 
-/** Tarjeta de una entrevista. */
+/** Tarjeta estilizada de una entrevista. */
 @Composable
 private fun TarjetaEntrevista(
     entrevista: Entrevista,
@@ -85,31 +92,47 @@ private fun TarjetaEntrevista(
 ) {
     Card(
         modifier = Modifier.fillMaxWidth(),
+        shape = RoundedCornerShape(20.dp),
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surface
         ),
-        elevation = CardDefaults.cardElevation(defaultElevation = 1.dp)
+        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
     ) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(14.dp),
-            verticalArrangement = Arrangement.spacedBy(6.dp)
+                .padding(16.dp),
+            verticalArrangement = Arrangement.spacedBy(10.dp)
         ) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(12.dp)
             ) {
+                Box(
+                    modifier = Modifier
+                        .size(42.dp)
+                        .clip(CircleShape)
+                        .background(MaterialTheme.colorScheme.primary.copy(alpha = 0.1f)),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Icon(
+                        imageVector = Icons.Filled.Person,
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.primary,
+                        modifier = Modifier.size(22.dp)
+                    )
+                }
+
                 Column(modifier = Modifier.weight(1f)) {
                     Text(
-                        // Una fuente anónima nunca muestra el nombre, aunque
-                        // se haya escrito algo antes de marcar la casilla.
                         text = if (entrevista.anonima) {
                             stringResource(R.string.interview_anonymous)
                         } else {
                             entrevista.nombreEntrevistado
                         },
                         style = MaterialTheme.typography.titleMedium,
+                        fontWeight = FontWeight.Bold,
                         color = MaterialTheme.colorScheme.onSurface
                     )
                     Text(
@@ -122,11 +145,19 @@ private fun TarjetaEntrevista(
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 }
-                Text(
-                    text = entrevista.fecha.formatoCorto(),
-                    style = MaterialTheme.typography.labelSmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
+
+                Surface(
+                    shape = RoundedCornerShape(50),
+                    color = MaterialTheme.colorScheme.surfaceVariant
+                ) {
+                    Text(
+                        text = entrevista.fecha.formatoCorto(),
+                        style = MaterialTheme.typography.labelSmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp)
+                    )
+                }
+
                 if (puedeEliminar) {
                     IconButton(onClick = alEliminar) {
                         Icon(
@@ -138,13 +169,20 @@ private fun TarjetaEntrevista(
                 }
             }
 
-            Text(
-                text = entrevista.hallazgos.ifBlank {
-                    stringResource(R.string.interview_no_findings)
-                },
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurface
-            )
+            Surface(
+                modifier = Modifier.fillMaxWidth(),
+                shape = RoundedCornerShape(14.dp),
+                color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.4f)
+            ) {
+                Text(
+                    text = entrevista.hallazgos.ifBlank {
+                        stringResource(R.string.interview_no_findings)
+                    },
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurface,
+                    modifier = Modifier.padding(12.dp)
+                )
+            }
         }
     }
 }
@@ -156,40 +194,61 @@ fun PestanaConclusiones(
     alCambiar: (String) -> Unit,
     alGuardar: () -> Unit
 ) {
-    Column(
+    Card(
         modifier = Modifier
             .fillMaxSize()
             .verticalScroll(rememberScrollState())
             .padding(16.dp),
-        verticalArrangement = Arrangement.spacedBy(12.dp)
+        shape = RoundedCornerShape(20.dp),
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.surface
+        ),
+        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
     ) {
-        Text(
-            text = stringResource(R.string.conclusion_title),
-            style = MaterialTheme.typography.titleMedium
-        )
-
-        if (estado.estaCerrado) {
-            // Con el caso cerrado la conclusión se lee pero no se edita.
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(20.dp),
+            verticalArrangement = Arrangement.spacedBy(14.dp)
+        ) {
             Text(
-                text = estado.borradorConclusion.ifBlank {
-                    stringResource(R.string.conclusion_empty)
-                },
-                style = MaterialTheme.typography.bodyLarge,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
+                text = stringResource(R.string.conclusion_title),
+                style = MaterialTheme.typography.titleMedium,
+                fontWeight = FontWeight.Bold,
+                color = MaterialTheme.colorScheme.primary
             )
-        } else {
-            OutlinedTextField(
-                value = estado.borradorConclusion,
-                onValueChange = alCambiar,
-                placeholder = { Text(stringResource(R.string.conclusion_hint)) },
-                minLines = 6,
-                modifier = Modifier.fillMaxWidth()
-            )
-            Button(
-                onClick = alGuardar,
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Text(stringResource(R.string.dialog_save))
+
+            if (estado.estaCerrado) {
+                Text(
+                    text = estado.borradorConclusion.ifBlank {
+                        stringResource(R.string.conclusion_empty)
+                    },
+                    style = MaterialTheme.typography.bodyLarge,
+                    color = MaterialTheme.colorScheme.onSurface
+                )
+            } else {
+                OutlinedTextField(
+                    value = estado.borradorConclusion,
+                    onValueChange = alCambiar,
+                    placeholder = { Text(stringResource(R.string.conclusion_hint)) },
+                    minLines = 6,
+                    shape = RoundedCornerShape(16.dp),
+                    colors = OutlinedTextFieldDefaults.colors(
+                        focusedBorderColor = MaterialTheme.colorScheme.primary,
+                        unfocusedBorderColor = MaterialTheme.colorScheme.outline.copy(alpha = 0.5f)
+                    ),
+                    modifier = Modifier.fillMaxWidth()
+                )
+                Button(
+                    onClick = alGuardar,
+                    shape = RoundedCornerShape(16.dp),
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Text(
+                        text = stringResource(R.string.dialog_save),
+                        fontWeight = FontWeight.SemiBold
+                    )
+                }
             }
         }
     }
@@ -211,8 +270,8 @@ fun PestanaEvidencias(
 
     LazyColumn(
         modifier = Modifier.fillMaxSize(),
-        contentPadding = androidx.compose.foundation.layout.PaddingValues(16.dp),
-        verticalArrangement = Arrangement.spacedBy(8.dp)
+        contentPadding = PaddingValues(16.dp),
+        verticalArrangement = Arrangement.spacedBy(10.dp)
     ) {
         items(items = estado.evidencias, key = { it.id }) { evidencia ->
             FilaEvidencia(
@@ -224,7 +283,7 @@ fun PestanaEvidencias(
     }
 }
 
-/** Fila de una evidencia, con el ícono según el tipo de archivo. */
+/** Fila de una evidencia estilizada con su ícono por tipo. */
 @Composable
 private fun FilaEvidencia(
     evidencia: Evidencia,
@@ -233,6 +292,7 @@ private fun FilaEvidencia(
 ) {
     Card(
         modifier = Modifier.fillMaxWidth(),
+        shape = RoundedCornerShape(18.dp),
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surface
         ),
@@ -242,19 +302,29 @@ private fun FilaEvidencia(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(14.dp),
-            horizontalArrangement = Arrangement.spacedBy(12.dp),
+            horizontalArrangement = Arrangement.spacedBy(14.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Icon(
-                imageVector = iconoDe(evidencia.tipo),
-                contentDescription = null,
-                tint = MaterialTheme.colorScheme.secondary,
-                modifier = Modifier.size(28.dp)
-            )
+            Box(
+                modifier = Modifier
+                    .size(40.dp)
+                    .clip(CircleShape)
+                    .background(MaterialTheme.colorScheme.secondary.copy(alpha = 0.12f)),
+                contentAlignment = Alignment.Center
+            ) {
+                Icon(
+                    imageVector = iconoDe(evidencia.tipo),
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.secondary,
+                    modifier = Modifier.size(22.dp)
+                )
+            }
+
             Column(modifier = Modifier.weight(1f)) {
                 Text(
                     text = evidencia.nombre,
                     style = MaterialTheme.typography.bodyLarge,
+                    fontWeight = FontWeight.SemiBold,
                     color = MaterialTheme.colorScheme.onSurface
                 )
                 Text(
@@ -263,6 +333,7 @@ private fun FilaEvidencia(
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
+
             if (puedeEliminar) {
                 IconButton(onClick = alEliminar) {
                     Icon(

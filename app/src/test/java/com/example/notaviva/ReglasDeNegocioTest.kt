@@ -13,13 +13,6 @@ import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 
-/**
- * Pruebas de las reglas de negocio del repositorio.
- *
- * Se ejecutan contra [RepositorioFalso], que reproduce el mismo contrato que
- * la implementación con SQLite. De esta forma las reglas quedan verificadas
- * sin necesidad de un dispositivo.
- */
 class ReglasDeNegocioTest {
 
     private lateinit var repositorio: RepositorioFalso

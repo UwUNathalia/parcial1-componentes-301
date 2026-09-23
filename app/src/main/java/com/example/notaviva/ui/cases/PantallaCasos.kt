@@ -6,6 +6,7 @@ import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -13,9 +14,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.FilterChip
-import androidx.compose.material3.FilterChipDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -30,10 +31,10 @@ import com.example.notaviva.ui.components.etiquetaRes
 import com.example.notaviva.viewmodel.EstadoListaCasos
 
 /**
- * Listado de casos con búsqueda y filtro por estado, equivalente al segundo
- * mockup del enunciado.
+ * Listado de casos con búsqueda y filtros por estado.
  *
- * Recibe el estado ya resuelto por el ViewModel y se limita a dibujarlo.
+ * Mantiene la misma estética moderna que la pantalla de inicio con chips redondeados,
+ * barra de búsqueda curva e ítems de tarjetas espaciados.
  */
 @Composable
 fun PantallaCasos(
@@ -73,15 +74,13 @@ fun PantallaCasos(
 
             else -> LazyColumn(
                 modifier = Modifier.fillMaxSize(),
-                contentPadding = androidx.compose.foundation.layout.PaddingValues(
+                contentPadding = PaddingValues(
                     start = 16.dp,
                     end = 16.dp,
                     bottom = 24.dp
                 ),
-                verticalArrangement = Arrangement.spacedBy(10.dp)
+                verticalArrangement = Arrangement.spacedBy(12.dp)
             ) {
-                // La clave estable evita que Compose redibuje toda la lista
-                // cuando solo cambió un elemento.
                 items(items = estado.casos, key = { it.caso.id }) { resumen ->
                     TarjetaCaso(
                         casoConResumen = resumen,
@@ -93,12 +92,7 @@ fun PantallaCasos(
     }
 }
 
-/**
- * Chips de filtro: "Todos" más un chip por cada estado.
- *
- * Se desplazan en horizontal porque en pantallas angostas los cinco chips no
- * caben en una línea.
- */
+/** Chips de filtro por estado con bordes suavemente redondeados (pill shape). */
 @Composable
 private fun FilaFiltros(
     seleccionado: EstadoCaso?,
@@ -114,14 +108,14 @@ private fun FilaFiltros(
             selected = seleccionado == null,
             onClick = { alFiltrar(null) },
             label = { Text(stringResource(R.string.cases_filter_all)) },
-            shape = FilterChipDefaults.shape
+            shape = RoundedCornerShape(50)
         )
         EstadoCaso.entries.forEach { estado ->
             FilterChip(
                 selected = seleccionado == estado,
                 onClick = { alFiltrar(estado) },
                 label = { Text(stringResource(estado.etiquetaRes)) },
-                shape = FilterChipDefaults.shape
+                shape = RoundedCornerShape(50)
             )
         }
     }

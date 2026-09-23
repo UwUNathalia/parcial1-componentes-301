@@ -12,13 +12,6 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-/**
- * Estado completo de la pantalla de listado.
- *
- * Toda la pantalla se dibuja a partir de este único objeto. Tener un solo
- * estado, en vez de varias variables sueltas, evita que la interfaz quede en
- * combinaciones imposibles (por ejemplo, cargando y con error al mismo tiempo).
- */
 data class EstadoListaCasos(
     val cargando: Boolean = true,
     val casos: List<CasoConResumen> = emptyList(),
@@ -27,36 +20,25 @@ data class EstadoListaCasos(
     val resumen: ResumenGeneral = ResumenGeneral(),
     val mensaje: String? = null
 ) {
-    /** True si no hay resultados pero sí hay filtros activos. */
     val sinResultados: Boolean
         get() = !cargando && casos.isEmpty() && (consulta.isNotBlank() || filtroEstado != null)
 
-    /** True si la aplicación todavía no tiene ningún caso registrado. */
     val sinCasos: Boolean
         get() = !cargando && casos.isEmpty() && consulta.isBlank() && filtroEstado == null
 }
 
-/**
- * ViewModel del listado de casos y de la pantalla de inicio.
- *
- * Es la capa de lógica: recibe las acciones del usuario, le pide los datos al
- * repositorio y publica un estado que la vista se limita a dibujar. No conoce
- * Compose ni SQLite.
- */
 class CasosViewModel(
     private val repositorio: RepositorioCasos
 ) : ViewModel() {
 
     private val _estado = MutableStateFlow(EstadoListaCasos())
 
-    /** Estado que observa la pantalla. */
     val estado: StateFlow<EstadoListaCasos> = _estado.asStateFlow()
 
     init {
         cargar()
     }
 
-    /** Vuelve a leer los datos. Se llama al entrar y después de cada cambio. */
     fun cargar() {
         viewModelScope.launch {
             _estado.update { it.copy(cargando = true) }

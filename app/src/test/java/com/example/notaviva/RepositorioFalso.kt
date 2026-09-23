@@ -8,14 +8,6 @@ import com.example.notaviva.domain.model.Entrevista
 import com.example.notaviva.domain.model.Evidencia
 import com.example.notaviva.domain.model.ResumenGeneral
 
-/**
- * Repositorio de mentira que guarda todo en memoria.
- *
- * Gracias a que los ViewModels dependen de la interfaz [RepositorioCasos] y no
- * de la implementación con SQLite, las pruebas pueden correr en la JVM, sin
- * emulador y sin base de datos. Esa es la razón práctica de haber definido la
- * interfaz.
- */
 class RepositorioFalso : RepositorioCasos {
 
     private val casos = mutableListOf<Caso>()

@@ -6,11 +6,14 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.CalendarMonth
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Lock
@@ -25,6 +28,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
@@ -36,8 +40,10 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.example.notaviva.R
@@ -46,10 +52,10 @@ import com.example.notaviva.ui.components.formatoCorto
 import com.example.notaviva.viewmodel.EstadoDetalleCaso
 
 /**
- * Detalle de un caso, equivalente al tercer mockup del enunciado.
+ * Pantalla de detalle de un caso.
  *
- * Organiza la información en cuatro pestañas para no amontonar entrevistas,
- * evidencias y conclusión en una sola columna interminable.
+ * Organiza la información en 4 pestañas estilizadas:
+ * Resumen, Entrevistas, Conclusiones y Evidencias.
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -80,7 +86,6 @@ fun PantallaDetalleCaso(
         stringResource(R.string.detail_tab_evidence)
     )
 
-    // Muestra el mensaje emergente cuando el ViewModel publica uno.
     LaunchedEffect(estado.mensaje) {
         estado.mensaje?.let {
             anfitrionMensajes.showSnackbar(it)
@@ -88,7 +93,6 @@ fun PantallaDetalleCaso(
         }
     }
 
-    // Si el caso se eliminó, esta pantalla ya no tiene qué mostrar.
     LaunchedEffect(estado.casoEliminado) {
         if (estado.casoEliminado) alVolver()
     }
@@ -100,7 +104,8 @@ fun PantallaDetalleCaso(
                     Text(
                         text = estado.caso?.titulo ?: stringResource(R.string.app_name),
                         maxLines = 1,
-                        overflow = TextOverflow.Ellipsis
+                        overflow = TextOverflow.Ellipsis,
+                        fontWeight = FontWeight.Bold
                     )
                 },
                 navigationIcon = {
@@ -140,10 +145,9 @@ fun PantallaDetalleCaso(
         },
         snackbarHost = { SnackbarHost(anfitrionMensajes) },
         floatingActionButton = {
-            // El botón de agregar solo aparece donde tiene sentido, y nunca si
-            // el caso está cerrado.
             if (!estado.estaCerrado && (pestana == 1 || pestana == 3)) {
                 FloatingActionButton(
+                    shape = RoundedCornerShape(16.dp),
                     onClick = {
                         if (pestana == 1) mostrarDialogoEntrevista = true
                         else mostrarDialogoEvidencia = true
@@ -167,7 +171,10 @@ fun PantallaDetalleCaso(
         ) {
             Cabecera(estado)
 
-            TabRow(selectedTabIndex = pestana) {
+            TabRow(
+                selectedTabIndex = pestana,
+                containerColor = MaterialTheme.colorScheme.surface
+            ) {
                 titulos.forEachIndexed { indice, titulo ->
                     Tab(
                         selected = pestana == indice,
@@ -177,7 +184,8 @@ fun PantallaDetalleCaso(
                                 text = titulo,
                                 maxLines = 1,
                                 overflow = TextOverflow.Ellipsis,
-                                style = MaterialTheme.typography.labelSmall
+                                style = MaterialTheme.typography.labelSmall,
+                                fontWeight = if (pestana == indice) FontWeight.Bold else FontWeight.Medium
                             )
                         }
                     )
@@ -215,45 +223,85 @@ fun PantallaDetalleCaso(
     }
 }
 
-/** Franja superior con el estado, la fecha y el aviso de caso cerrado. */
+/** Tarjeta superior con la metadata del caso y el aviso si está cerrado. */
 @Composable
 private fun Cabecera(estado: EstadoDetalleCaso) {
     val caso = estado.caso ?: return
 
-    Column(
+    Card(
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 16.dp, vertical = 10.dp),
-        verticalArrangement = Arrangement.spacedBy(8.dp)
+        shape = RoundedCornerShape(20.dp),
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.4f)
+        ),
+        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
-        Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-            EtiquetaEstado(estado = caso.estado)
-            Text(
-                text = caso.fecha.formatoCorto(),
-                style = MaterialTheme.typography.labelSmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
-            )
-            if (caso.tema.isNotBlank()) {
-                Text(
-                    text = caso.tema,
-                    style = MaterialTheme.typography.labelSmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
-            }
-        }
-
-        if (estado.estaCerrado) {
-            Card(
-                colors = CardDefaults.cardColors(
-                    containerColor = MaterialTheme.colorScheme.primaryContainer
-                )
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(14.dp),
+            verticalArrangement = Arrangement.spacedBy(10.dp)
+        ) {
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                verticalAlignment = Alignment.CenterVertically
             ) {
-                Text(
-                    text = stringResource(R.string.detail_case_closed_notice),
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onPrimaryContainer,
-                    modifier = Modifier.padding(12.dp)
-                )
+                EtiquetaEstado(estado = caso.estado)
+
+                Surface(
+                    shape = RoundedCornerShape(50),
+                    color = MaterialTheme.colorScheme.surface
+                ) {
+                    Row(
+                        modifier = Modifier.padding(horizontal = 10.dp, vertical = 4.dp),
+                        horizontalArrangement = Arrangement.spacedBy(4.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Icon(
+                            imageVector = Icons.Filled.CalendarMonth,
+                            contentDescription = null,
+                            tint = MaterialTheme.colorScheme.primary,
+                            modifier = Modifier.size(14.dp)
+                        )
+                        Text(
+                            text = caso.fecha.formatoCorto(),
+                            style = MaterialTheme.typography.labelSmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                    }
+                }
+
+                if (caso.tema.isNotBlank()) {
+                    Surface(
+                        shape = RoundedCornerShape(50),
+                        color = MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.6f)
+                    ) {
+                        Text(
+                            text = caso.tema,
+                            style = MaterialTheme.typography.labelSmall,
+                            fontWeight = FontWeight.Medium,
+                            color = MaterialTheme.colorScheme.onSecondaryContainer,
+                            modifier = Modifier.padding(horizontal = 10.dp, vertical = 4.dp)
+                        )
+                    }
+                }
+            }
+
+            if (estado.estaCerrado) {
+                Surface(
+                    shape = RoundedCornerShape(14.dp),
+                    color = MaterialTheme.colorScheme.errorContainer.copy(alpha = 0.4f)
+                ) {
+                    Text(
+                        text = stringResource(R.string.detail_case_closed_notice),
+                        style = MaterialTheme.typography.bodySmall,
+                        fontWeight = FontWeight.Medium,
+                        color = MaterialTheme.colorScheme.onErrorContainer,
+                        modifier = Modifier.padding(10.dp)
+                    )
+                }
             }
         }
     }
@@ -263,23 +311,36 @@ private fun Cabecera(estado: EstadoDetalleCaso) {
 @Composable
 private fun PestanaResumen(estado: EstadoDetalleCaso) {
     val caso = estado.caso ?: return
-    Column(
+    Card(
         modifier = Modifier
             .fillMaxSize()
             .verticalScroll(rememberScrollState())
             .padding(16.dp),
-        verticalArrangement = Arrangement.spacedBy(8.dp)
+        shape = RoundedCornerShape(20.dp),
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.surface
+        ),
+        elevation = CardDefaults.cardElevation(defaultElevation = 1.dp)
     ) {
-        Text(
-            text = stringResource(R.string.detail_description),
-            style = MaterialTheme.typography.titleMedium
-        )
-        Text(
-            text = caso.descripcion.ifBlank {
-                stringResource(R.string.detail_no_description)
-            },
-            style = MaterialTheme.typography.bodyLarge,
-            color = MaterialTheme.colorScheme.onSurfaceVariant
-        )
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(20.dp),
+            verticalArrangement = Arrangement.spacedBy(10.dp)
+        ) {
+            Text(
+                text = stringResource(R.string.detail_description),
+                style = MaterialTheme.typography.titleMedium,
+                fontWeight = FontWeight.Bold,
+                color = MaterialTheme.colorScheme.primary
+            )
+            Text(
+                text = caso.descripcion.ifBlank {
+                    stringResource(R.string.detail_no_description)
+                },
+                style = MaterialTheme.typography.bodyLarge,
+                color = MaterialTheme.colorScheme.onSurface
+            )
+        }
     }
 }

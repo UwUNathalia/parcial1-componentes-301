@@ -8,13 +8,6 @@ import org.junit.Assert.assertTrue
 import org.junit.Test
 import java.time.LocalDate
 
-/**
- * Pruebas de la validación del formulario.
- *
- * Verifican la parte síncrona del ViewModel: la validación ocurre antes de
- * lanzar cualquier corrutina, así que se puede comprobar directamente sin
- * necesidad de emulador ni de un hilo principal de Android.
- */
 class FormularioCasoViewModelTest {
 
     private fun crearViewModel() = FormularioCasoViewModel(RepositorioFalso(), casoId = 0)

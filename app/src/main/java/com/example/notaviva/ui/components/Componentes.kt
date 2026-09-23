@@ -9,10 +9,13 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -29,14 +32,14 @@ import java.time.format.DateTimeFormatter
 import java.util.Locale
 
 /**
- * Componentes visuales que se repiten en varias pantallas.
+ * Componentes visuales reusables de la aplicación NotaViva.
  *
- * Tenerlos en un solo archivo evita copiar y pegar el mismo bloque de Compose
- * en cada pantalla, que es la principal fuente de inconsistencias visuales.
+ * Mantiene la coherencia de diseño (bordes redondeados, paleta de colores Material 3
+ * y tipografía editorial) en todas las pantallas.
  */
 
 /**
- * Etiqueta de color con el estado del caso, como en los mockups.
+ * Etiqueta de color con el estado del caso, diseñada en forma de pill redondeada.
  */
 @Composable
 fun EtiquetaEstado(
@@ -46,20 +49,17 @@ fun EtiquetaEstado(
     Text(
         text = stringResource(estado.etiquetaRes),
         style = MaterialTheme.typography.labelSmall,
-        fontWeight = FontWeight.Medium,
+        fontWeight = FontWeight.SemiBold,
         color = estado.colorTexto(),
         modifier = modifier
             .clip(RoundedCornerShape(50))
             .background(estado.colorFondo())
-            .padding(horizontal = 10.dp, vertical = 4.dp)
+            .padding(horizontal = 12.dp, vertical = 5.dp)
     )
 }
 
 /**
- * Mensaje centrado para cuando una lista está vacía.
- *
- * Una lista en blanco deja al usuario sin saber si la aplicación falló o si
- * simplemente no hay nada, por eso siempre se muestra una explicación.
+ * Mensaje centrado para cuando una lista o sección está vacía.
  */
 @Composable
 fun MensajeVacio(
@@ -67,33 +67,42 @@ fun MensajeVacio(
     mensaje: String,
     modifier: Modifier = Modifier
 ) {
-    Column(
+    Card(
         modifier = modifier
             .fillMaxWidth()
-            .padding(32.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(6.dp)
+            .padding(vertical = 16.dp),
+        shape = RoundedCornerShape(20.dp),
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.35f)
+        ),
+        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
-        Text(
-            text = titulo,
-            style = MaterialTheme.typography.titleMedium,
-            color = MaterialTheme.colorScheme.onSurface,
-            textAlign = TextAlign.Center
-        )
-        Text(
-            text = mensaje,
-            style = MaterialTheme.typography.bodyMedium,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
-            textAlign = TextAlign.Center
-        )
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(28.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            Text(
+                text = titulo,
+                style = MaterialTheme.typography.titleMedium,
+                fontWeight = FontWeight.Bold,
+                color = MaterialTheme.colorScheme.onSurface,
+                textAlign = TextAlign.Center
+            )
+            Text(
+                text = mensaje,
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                textAlign = TextAlign.Center
+            )
+        }
     }
 }
 
 /**
- * Campo de búsqueda con ícono de lupa y botón para limpiar.
- *
- * @param texto lo que hay escrito ahora mismo.
- * @param alCambiar se llama en cada tecla; el ViewModel decide qué hacer.
+ * Campo de búsqueda estilizado con esquinas redondeadas (16.dp) e ícono de lupa.
  */
 @Composable
 fun BarraBusqueda(
@@ -106,12 +115,13 @@ fun BarraBusqueda(
         onValueChange = alCambiar,
         modifier = modifier.fillMaxWidth(),
         singleLine = true,
-        shape = RoundedCornerShape(12.dp),
+        shape = RoundedCornerShape(16.dp),
         placeholder = { Text(stringResource(R.string.cases_search_hint)) },
         leadingIcon = {
             Icon(
                 imageVector = Icons.Filled.Search,
-                contentDescription = null
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.primary
             )
         },
         trailingIcon = {
@@ -123,14 +133,16 @@ fun BarraBusqueda(
                     )
                 }
             }
-        }
+        },
+        colors = OutlinedTextFieldDefaults.colors(
+            focusedBorderColor = MaterialTheme.colorScheme.primary,
+            unfocusedBorderColor = MaterialTheme.colorScheme.outline.copy(alpha = 0.5f)
+        )
     )
 }
 
 /**
- * Convierte una fecha a un texto corto y legible, del estilo "12 mar 2026".
- *
- * Usa el idioma del dispositivo, así que en inglés queda "12 Mar 2026".
+ * Convierte una fecha a un texto corto y legible (ej: "12 mar 2026").
  */
 fun LocalDate.formatoCorto(): String =
     format(DateTimeFormatter.ofPattern("d MMM yyyy", Locale.getDefault()))

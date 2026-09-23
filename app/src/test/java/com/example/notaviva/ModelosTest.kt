@@ -10,12 +10,6 @@ import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Test
 
-/**
- * Pruebas de las reglas que viven en los modelos de dominio.
- *
- * Son pruebas unitarias puras: corren en la JVM, sin emulador y sin base de
- * datos, porque los modelos no dependen de Android.
- */
 class ModelosTest {
 
     // --- Caso ---
