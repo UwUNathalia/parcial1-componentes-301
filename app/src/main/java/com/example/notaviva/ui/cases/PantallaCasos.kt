@@ -1,4 +1,4 @@
-@file:OptIn(androidx.compose.material3.ExperimentalMaterial3Api::class)
+@file:OptIn(ExperimentalMaterial3Api::class)
 
 package com.example.notaviva.ui.cases
 
@@ -16,6 +16,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -30,12 +31,7 @@ import com.example.notaviva.ui.components.MensajeVacio
 import com.example.notaviva.ui.components.etiquetaRes
 import com.example.notaviva.viewmodel.EstadoListaCasos
 
-/**
- * Listado de casos con búsqueda y filtros por estado.
- *
- * Mantiene la misma estética moderna que la pantalla de inicio con chips redondeados,
- * barra de búsqueda curva e ítems de tarjetas espaciados.
- */
+/** Listado de casos con búsqueda y filtros por estado. */
 @Composable
 fun PantallaCasos(
     estado: EstadoListaCasos,
@@ -92,7 +88,6 @@ fun PantallaCasos(
     }
 }
 
-/** Chips de filtro por estado con bordes suavemente redondeados (pill shape). */
 @Composable
 private fun FilaFiltros(
     seleccionado: EstadoCaso?,

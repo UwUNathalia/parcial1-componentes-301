@@ -51,12 +51,7 @@ import com.example.notaviva.ui.components.EtiquetaEstado
 import com.example.notaviva.ui.components.formatoCorto
 import com.example.notaviva.viewmodel.EstadoDetalleCaso
 
-/**
- * Pantalla de detalle de un caso.
- *
- * Organiza la información en 4 pestañas estilizadas:
- * Resumen, Entrevistas, Conclusiones y Evidencias.
- */
+/** Pantalla de detalle de un caso. */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PantallaDetalleCaso(
@@ -223,7 +218,6 @@ fun PantallaDetalleCaso(
     }
 }
 
-/** Tarjeta superior con la metadata del caso y el aviso si está cerrado. */
 @Composable
 private fun Cabecera(estado: EstadoDetalleCaso) {
     val caso = estado.caso ?: return
@@ -307,7 +301,6 @@ private fun Cabecera(estado: EstadoDetalleCaso) {
     }
 }
 
-/** Pestaña con la descripción del caso. */
 @Composable
 private fun PestanaResumen(estado: EstadoDetalleCaso) {
     val caso = estado.caso ?: return

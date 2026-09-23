@@ -2,26 +2,9 @@ package com.example.notaviva.data.local
 
 import android.provider.BaseColumns
 
-/**
- * Contrato de la base de datos: nombres de tablas y columnas en un solo lugar.
- *
- * Tener los nombres centralizados evita errores de escritura en las consultas,
- * que en SQL solo se descubren cuando la aplicación ya está corriendo.
- *
- * El modelo de datos son tres tablas:
- *
- * ```
- *   casos (1) ──────< (N) entrevistas
- *     │
- *     └────────────< (N) evidencias
- * ```
- *
- * Las tablas hijas guardan el id del caso como clave foránea con borrado en
- * cascada: al eliminar un caso desaparecen sus entrevistas y sus evidencias.
- */
+/**Nombres de tablas y columnas de la base de datos. */
 object ContratoNotaViva {
 
-    /** Tabla principal de casos de investigación. */
     object TablaCasos : BaseColumns {
         const val NOMBRE = "casos"
         const val ID = BaseColumns._ID
@@ -47,7 +30,6 @@ object ContratoNotaViva {
         const val ELIMINAR = "DROP TABLE IF EXISTS $NOMBRE"
     }
 
-    /** Entrevistas realizadas dentro de un caso. */
     object TablaEntrevistas : BaseColumns {
         const val NOMBRE = "entrevistas"
         const val ID = BaseColumns._ID
@@ -75,7 +57,6 @@ object ContratoNotaViva {
         const val ELIMINAR = "DROP TABLE IF EXISTS $NOMBRE"
     }
 
-    /** Archivos de respaldo asociados a un caso. */
     object TablaEvidencias : BaseColumns {
         const val NOMBRE = "evidencias"
         const val ID = BaseColumns._ID
@@ -101,10 +82,7 @@ object ContratoNotaViva {
         const val ELIMINAR = "DROP TABLE IF EXISTS $NOMBRE"
     }
 
-    /**
-     * Índice sobre el título para que la búsqueda no recorra toda la tabla
-     * cuando haya muchos casos.
-     */
+    /** Índice sobre el título para que la búsqueda no recorra toda la tabla cuando haya muchos casos. */
     const val CREAR_INDICE_TITULO =
         "CREATE INDEX idx_casos_titulo ON ${TablaCasos.NOMBRE}(${TablaCasos.TITULO})"
 }

@@ -6,15 +6,9 @@ import com.example.notaviva.data.local.ContratoNotaViva.TablaEntrevistas
 import com.example.notaviva.domain.model.Entrevista
 import java.time.LocalDate
 
-/**
- * Acceso a la tabla de entrevistas.
- *
- * Las entrevistas siempre se consultan dentro de un caso, por eso casi todos
- * los métodos reciben un `casoId`.
- */
+/** Acceso a la tabla de entrevistas. */
 class EntrevistaDao(private val helper: NotaVivaDbHelper) {
 
-    /** Guarda una entrevista nueva y devuelve su id. */
     fun insertar(entrevista: Entrevista): Long =
         helper.writableDatabase.insert(
             TablaEntrevistas.NOMBRE,
@@ -22,7 +16,6 @@ class EntrevistaDao(private val helper: NotaVivaDbHelper) {
             aContentValues(entrevista)
         )
 
-    /** Actualiza una entrevista existente. */
     fun actualizar(entrevista: Entrevista): Int =
         helper.writableDatabase.update(
             TablaEntrevistas.NOMBRE,
@@ -31,7 +24,6 @@ class EntrevistaDao(private val helper: NotaVivaDbHelper) {
             arrayOf(entrevista.id.toString())
         )
 
-    /** Borra una entrevista por su id. */
     fun eliminar(id: Long): Int =
         helper.writableDatabase.delete(
             TablaEntrevistas.NOMBRE,
@@ -39,7 +31,6 @@ class EntrevistaDao(private val helper: NotaVivaDbHelper) {
             arrayOf(id.toString())
         )
 
-    /** Entrevistas de un caso, de la más reciente a la más antigua. */
     fun obtenerPorCaso(casoId: Long): List<Entrevista> {
         val sql = """
             SELECT * FROM ${TablaEntrevistas.NOMBRE}
@@ -55,7 +46,6 @@ class EntrevistaDao(private val helper: NotaVivaDbHelper) {
         return entrevistas
     }
 
-    /** Busca una entrevista concreta. Devuelve null si no existe. */
     fun obtenerPorId(id: Long): Entrevista? {
         val sql = "SELECT * FROM ${TablaEntrevistas.NOMBRE} WHERE ${TablaEntrevistas.ID} = ?"
         helper.readableDatabase.rawQuery(sql, arrayOf(id.toString())).use { cursor ->
@@ -63,7 +53,6 @@ class EntrevistaDao(private val helper: NotaVivaDbHelper) {
         }
     }
 
-    /** Cuántas entrevistas tiene un caso. */
     fun contarPorCaso(casoId: Long): Int {
         val sql = """
             SELECT COUNT(*) FROM ${TablaEntrevistas.NOMBRE}
@@ -74,7 +63,6 @@ class EntrevistaDao(private val helper: NotaVivaDbHelper) {
         }
     }
 
-    /** Total de entrevistas registradas en la aplicación. */
     fun contarTodas(): Int {
         val sql = "SELECT COUNT(*) FROM ${TablaEntrevistas.NOMBRE}"
         helper.readableDatabase.rawQuery(sql, null).use { cursor ->
@@ -88,7 +76,6 @@ class EntrevistaDao(private val helper: NotaVivaDbHelper) {
         put(TablaEntrevistas.ROL, entrevista.rol.trim())
         put(TablaEntrevistas.FECHA, entrevista.fecha.toString())
         put(TablaEntrevistas.HALLAZGOS, entrevista.hallazgos.trim())
-        // SQLite no tiene tipo booleano: se guarda como 1 o 0.
         put(TablaEntrevistas.ANONIMA, if (entrevista.anonima) 1 else 0)
     }
 

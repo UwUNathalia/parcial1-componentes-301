@@ -15,18 +15,7 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
-/**
- * Implementación de [RepositorioCasos] sobre SQLite.
- *
- * Es la única clase de la aplicación que conoce los DAOs. Su trabajo es:
- *
- * - sacar las consultas del hilo principal con [withContext],
- * - aplicar las reglas de negocio que involucran a más de una tabla,
- * - y combinar datos de varias consultas antes de entregarlos a la vista.
- *
- * @param dispatcher hilo en el que se ejecutan las consultas. Se recibe como
- *   parámetro para poder sustituirlo en las pruebas.
- */
+/** Implementación de [RepositorioCasos] sobre SQLite. */
 class CasoRepository(
     private val casoDao: CasoDao,
     private val entrevistaDao: EntrevistaDao,
@@ -34,17 +23,11 @@ class CasoRepository(
     private val dispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : RepositorioCasos {
 
-    // ------------------------------------------------------------------
-    // Casos
-    // ------------------------------------------------------------------
-
     override suspend fun listarCasos(
         consulta: String,
         estado: EstadoCaso?
     ): List<CasoConResumen> = withContext(dispatcher) {
         val casos = casoDao.buscar(consulta, estado)
-        // Un solo conteo agrupado para toda la lista, en vez de una consulta
-        // por cada caso.
         val conteos = casoDao.contarEntrevistasPorCaso()
         casos.map { caso ->
             CasoConResumen(caso = caso, entrevistas = conteos[caso.id] ?: 0)
@@ -66,8 +49,6 @@ class CasoRepository(
     }
 
     override suspend fun eliminarCaso(id: Long): Boolean = withContext(dispatcher) {
-        // Las entrevistas y evidencias se borran solas por el ON DELETE CASCADE
-        // declarado en el esquema.
         casoDao.eliminar(id) > 0
     }
 
@@ -80,10 +61,6 @@ class CasoRepository(
         withContext(dispatcher) {
             casoDao.actualizarConclusion(id, conclusion.trim()) > 0
         }
-
-    // ------------------------------------------------------------------
-    // Entrevistas
-    // ------------------------------------------------------------------
 
     override suspend fun listarEntrevistas(casoId: Long): List<Entrevista> =
         withContext(dispatcher) {
@@ -108,10 +85,6 @@ class CasoRepository(
         entrevistaDao.eliminar(id) > 0
     }
 
-    // ------------------------------------------------------------------
-    // Evidencias
-    // ------------------------------------------------------------------
-
     override suspend fun listarEvidencias(casoId: Long): List<Evidencia> =
         withContext(dispatcher) {
             evidenciaDao.obtenerPorCaso(casoId)
@@ -128,10 +101,6 @@ class CasoRepository(
         evidenciaDao.eliminar(id) > 0
     }
 
-    // ------------------------------------------------------------------
-    // Resumen
-    // ------------------------------------------------------------------
-
     override suspend fun obtenerResumen(): ResumenGeneral = withContext(dispatcher) {
         ResumenGeneral(
             totalCasos = casoDao.contarTodos(),
@@ -140,11 +109,7 @@ class CasoRepository(
         )
     }
 
-    /**
-     * Regla de negocio: un caso cerrado no admite nuevas entrevistas ni
-     * evidencias. Para seguir trabajándolo hay que reabrirlo cambiando su
-     * estado.
-     */
+    /** Regla de negocio: verifica que un caso esté abierto antes de modificarlo. */
     private fun verificarCasoAbierto(casoId: Long) {
         val caso = casoDao.obtenerPorId(casoId)
             ?: throw IllegalStateException("El caso no existe.")
@@ -158,13 +123,7 @@ class CasoRepository(
         @Volatile
         private var instancia: CasoRepository? = null
 
-        /**
-         * Devuelve el repositorio compartido por toda la aplicación.
-         *
-         * Se guarda una sola instancia para no abrir la base de datos una vez
-         * por pantalla. Se usa `applicationContext` para no retener una
-         * Activity y provocar una fuga de memoria.
-         */
+        /** Devuelve el repositorio compartido por toda la aplicación. */
         fun obtener(context: Context): CasoRepository =
             instancia ?: synchronized(this) {
                 instancia ?: crear(context.applicationContext).also { instancia = it }

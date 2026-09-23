@@ -50,11 +50,7 @@ import com.example.notaviva.ui.components.MensajeVacio
 import com.example.notaviva.ui.components.formatoCorto
 import com.example.notaviva.viewmodel.EstadoDetalleCaso
 
-/**
- * Contenido de las pestañas del detalle con la estética unificada de NotaViva.
- */
 
-/** Lista de entrevistas del caso con sus hallazgos. */
 @Composable
 fun PestanaEntrevistas(
     estado: EstadoDetalleCaso,
@@ -83,7 +79,6 @@ fun PestanaEntrevistas(
     }
 }
 
-/** Tarjeta estilizada de una entrevista. */
 @Composable
 private fun TarjetaEntrevista(
     entrevista: Entrevista,
@@ -187,7 +182,6 @@ private fun TarjetaEntrevista(
     }
 }
 
-/** Pestaña con la conclusión editable del caso. */
 @Composable
 fun PestanaConclusiones(
     estado: EstadoDetalleCaso,
@@ -254,7 +248,6 @@ fun PestanaConclusiones(
     }
 }
 
-/** Pestaña con los archivos de respaldo del caso. */
 @Composable
 fun PestanaEvidencias(
     estado: EstadoDetalleCaso,
@@ -283,7 +276,6 @@ fun PestanaEvidencias(
     }
 }
 
-/** Fila de una evidencia estilizada con su ícono por tipo. */
 @Composable
 private fun FilaEvidencia(
     evidencia: Evidencia,
@@ -347,7 +339,6 @@ private fun FilaEvidencia(
     }
 }
 
-/** Ícono que corresponde a cada tipo de evidencia. */
 private fun iconoDe(tipo: TipoEvidencia): ImageVector = when (tipo) {
     TipoEvidencia.DOCUMENTO -> Icons.Filled.Description
     TipoEvidencia.IMAGEN -> Icons.Filled.Image

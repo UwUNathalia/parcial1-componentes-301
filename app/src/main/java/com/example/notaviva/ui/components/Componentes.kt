@@ -31,16 +31,8 @@ import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.Locale
 
-/**
- * Componentes visuales reusables de la aplicación NotaViva.
- *
- * Mantiene la coherencia de diseño (bordes redondeados, paleta de colores Material 3
- * y tipografía editorial) en todas las pantallas.
- */
 
-/**
- * Etiqueta de color con el estado del caso, diseñada en forma de pill redondeada.
- */
+/** Etiqueta con el estado del caso. */
 @Composable
 fun EtiquetaEstado(
     estado: EstadoCaso,
@@ -58,9 +50,7 @@ fun EtiquetaEstado(
     )
 }
 
-/**
- * Mensaje centrado para cuando una lista o sección está vacía.
- */
+/** Mensaje para secciones vacías. */
 @Composable
 fun MensajeVacio(
     titulo: String,
@@ -101,9 +91,7 @@ fun MensajeVacio(
     }
 }
 
-/**
- * Campo de búsqueda estilizado con esquinas redondeadas (16.dp) e ícono de lupa.
- */
+/** Campo de búsqueda de casos. */
 @Composable
 fun BarraBusqueda(
     texto: String,
@@ -141,8 +129,6 @@ fun BarraBusqueda(
     )
 }
 
-/**
- * Convierte una fecha a un texto corto y legible (ej: "12 mar 2026").
- */
+/** Formatea una fecha a un texto corto y legible. */
 fun LocalDate.formatoCorto(): String =
     format(DateTimeFormatter.ofPattern("d MMM yyyy", Locale.getDefault()))

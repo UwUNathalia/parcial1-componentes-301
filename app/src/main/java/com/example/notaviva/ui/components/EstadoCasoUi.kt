@@ -23,15 +23,8 @@ import com.example.notaviva.ui.theme.EstadoPublicadoFondoOscuro
 import com.example.notaviva.ui.theme.EstadoPublicadoTexto
 import com.example.notaviva.ui.theme.EstadoPublicadoTextoOscuro
 
-/**
- * Traducciones visuales de [EstadoCaso].
- *
- * El enum vive en la capa de dominio y por eso no conoce recursos ni colores.
- * Ese vínculo se hace aquí, en la capa de interfaz, que es la única que debe
- * saber cómo se ve cada estado y cómo se llama en cada idioma.
- */
 
-/** Texto que se muestra para el estado, traducido según el idioma del sistema. */
+
 @get:StringRes
 val EstadoCaso.etiquetaRes: Int
     get() = when (this) {
@@ -41,7 +34,7 @@ val EstadoCaso.etiquetaRes: Int
         EstadoCaso.CERRADO -> R.string.state_closed
     }
 
-/** Color de fondo de la etiqueta, adaptado al modo claro u oscuro. */
+/** Color de fondo para la etiqueta del estado. */
 @Composable
 fun EstadoCaso.colorFondo(): Color {
     val oscuro = isSystemInDarkTheme()
@@ -57,7 +50,7 @@ fun EstadoCaso.colorFondo(): Color {
     }
 }
 
-/** Color del texto de la etiqueta, adaptado al modo claro u oscuro. */
+/** Color de texto para la etiqueta del estado. */
 @Composable
 fun EstadoCaso.colorTexto(): Color {
     val oscuro = isSystemInDarkTheme()

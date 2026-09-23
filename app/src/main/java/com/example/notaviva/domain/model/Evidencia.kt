@@ -2,20 +2,7 @@ package com.example.notaviva.domain.model
 
 import java.util.Locale
 
-/**
- * Archivo de respaldo asociado a un caso: un contrato, una foto, el audio de
- * una entrevista o un video.
- *
- * Solo se guarda la referencia al archivo, nunca el archivo en sí, para no
- * llenar la base de datos.
- *
- * @property id identificador asignado por la base de datos.
- * @property casoId caso al que pertenece la evidencia.
- * @property nombre nombre visible del archivo, por ejemplo "contrato.pdf".
- * @property tipo categoría del archivo, usada para escoger el ícono.
- * @property tamanoBytes tamaño del archivo en bytes.
- * @property rutaLocal ubicación del archivo en el dispositivo.
- */
+/** Archivo de respaldo asociado a un caso. */
 data class Evidencia(
     val id: Long = 0,
     val casoId: Long,
@@ -25,21 +12,13 @@ data class Evidencia(
     val rutaLocal: String = ""
 ) {
 
-    /** Una evidencia es válida si pertenece a un caso guardado y tiene nombre. */
     val esValida: Boolean
         get() = casoId != 0L && nombre.isNotBlank()
 
-    /**
-     * Tamaño legible para mostrar en la interfaz: "2.4 MB", "980 KB".
-     * Se calcula aquí para que la vista no tenga que hacer cuentas.
-     */
     val tamanoLegible: String
         get() = when {
             tamanoBytes <= 0 -> "-"
             tamanoBytes < 1024 -> "$tamanoBytes B"
-            // Se fija Locale.US para que el separador decimal sea siempre un
-            // punto. Con el idioma del sistema, en español saldría "1,5 MB" y
-            // el mismo dato cambiaría de forma según el teléfono.
             tamanoBytes < 1024 * 1024 ->
                 String.format(Locale.US, "%.0f KB", tamanoBytes / 1024.0)
             else ->
@@ -48,10 +27,7 @@ data class Evidencia(
 
     companion object {
 
-        /**
-         * Deduce el tipo de evidencia a partir de la extensión del archivo.
-         * Si la extensión no se reconoce, se clasifica como [TipoEvidencia.OTRO].
-         */
+        /** Deduce el tipo de evidencia a partir de la extensión del archivo. */
         fun tipoSegunNombre(nombre: String): TipoEvidencia {
             val extension = nombre.substringAfterLast('.', "").lowercase()
             return when (extension) {
@@ -75,7 +51,6 @@ enum class TipoEvidencia {
 
     companion object {
 
-        /** Conversión segura desde el valor guardado en la base de datos. */
         fun desdeNombre(nombre: String?): TipoEvidencia =
             entries.firstOrNull { it.name == nombre } ?: OTRO
     }
