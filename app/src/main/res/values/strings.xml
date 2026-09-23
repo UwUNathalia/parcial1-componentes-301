@@ -49,8 +49,6 @@
     <string name="form_field_state">Estado</string>
     <string name="form_error_title_required">El título es obligatorio</string>
     <string name="form_save">Guardar</string>
-    <string name="form_cancel">Cancelar</string>
-    <string name="form_saved">Caso guardado</string>
 
     <!-- Detalle del caso -->
     <string name="detail_tab_summary">Resumen</string>
@@ -59,7 +57,6 @@
     <string name="detail_tab_evidence">Evidencias</string>
     <string name="detail_description">Descripción</string>
     <string name="detail_no_description">Sin descripción.</string>
-    <string name="detail_change_state">Cambiar estado</string>
     <string name="detail_close_case">Cerrar caso</string>
     <string name="detail_reopen_case">Reabrir caso</string>
     <string name="detail_case_closed_notice">El caso está cerrado. Reábrelo para agregar información.</string>
@@ -100,5 +97,4 @@
     <string name="dialog_add">Agregar</string>
     <string name="dialog_save">Guardar</string>
     <string name="dialog_cancel">Cancelar</string>
-    <string name="case_deleted">Caso eliminado</string>
 </resources>

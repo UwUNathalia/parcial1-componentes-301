@@ -66,15 +66,17 @@ class ReglasDeNegocioTest {
     }
 
     @Test
-    fun `un caso cerrado no acepta nuevas entrevistas`() = runBlocking {
-        val id = repositorio.guardarCaso(Caso(titulo = "Caso terminado"))
-        repositorio.cambiarEstado(id, EstadoCaso.CERRADO)
+    fun `un caso cerrado no acepta nuevas entrevistas`() {
+        runBlocking {
+            val id = repositorio.guardarCaso(Caso(titulo = "Caso terminado"))
+            repositorio.cambiarEstado(id, EstadoCaso.CERRADO)
 
-        assertThrows(IllegalStateException::class.java) {
-            runBlocking {
-                repositorio.guardarEntrevista(
-                    Entrevista(casoId = id, nombreEntrevistado = "Carlos Méndez")
-                )
+            assertThrows(IllegalStateException::class.java) {
+                runBlocking {
+                    repositorio.guardarEntrevista(
+                        Entrevista(casoId = id, nombreEntrevistado = "Carlos Méndez")
+                    )
+                }
             }
         }
     }

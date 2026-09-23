@@ -2,26 +2,40 @@
 
 package com.example.notaviva.ui.home
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowForward
 import androidx.compose.material.icons.automirrored.filled.ListAlt
-import androidx.compose.material.icons.filled.NoteAdd
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.CalendarMonth
+import androidx.compose.material.icons.filled.Folder
+import androidx.compose.material.icons.filled.RecordVoiceOver
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -33,11 +47,12 @@ import com.example.notaviva.domain.model.ResumenGeneral
 import com.example.notaviva.ui.theme.NotaVivaTheme
 
 /**
- * Pantalla de inicio, equivalente al primer mockup del enunciado.
+ * Pantalla de inicio de la aplicación NotaViva.
  *
- * Es una pantalla "tonta": recibe los datos ya calculados y las acciones como
- * parámetros, sin conocer el ViewModel. Eso permite verla en el Preview de
- * Android Studio sin base de datos.
+ * Diseñada como el panel de trabajo principal del periodista:
+ * - Tarjeta de bienvenida con la acción prioritaria (crear caso).
+ * - Indicadores clave de desempeño e investigaciones en curso.
+ * - Acceso directo a la gestión de casos.
  */
 @Composable
 fun PantallaInicio(
@@ -50,99 +65,185 @@ fun PantallaInicio(
         modifier = modifier
             .fillMaxSize()
             .verticalScroll(rememberScrollState())
-            .padding(20.dp),
+            .padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        Encabezado()
-
-        FilaResumen(resumen)
-
-        TarjetaAccion(
-            icono = Icons.Filled.NoteAdd,
-            titulo = stringResource(R.string.home_new_case),
-            descripcion = stringResource(R.string.home_new_case_hint),
-            alPulsar = alCrearCaso
+        // Banner Hero de Trabajo
+        TarjetaHero(
+            alCrearCaso = alCrearCaso
         )
 
-        TarjetaAccion(
-            icono = Icons.AutoMirrored.Filled.ListAlt,
-            titulo = stringResource(R.string.home_my_cases),
-            descripcion = stringResource(R.string.home_my_cases_hint),
-            alPulsar = alVerCasos
+        // Métrica de resumen
+        SeccionMetricas(resumen = resumen)
+
+        // Acceso a Casos
+        TarjetaAccionNavegacion(
+            totalCasos = resumen.totalCasos,
+            alVerCasos = alVerCasos
         )
     }
 }
 
-/** Saludo y nombre de la aplicación. */
+/** Tarjeta Hero principal con saludo, lema de la app y acción de crear caso. */
 @Composable
-private fun Encabezado() {
-    Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
-        Text(
-            text = stringResource(R.string.app_name),
-            style = MaterialTheme.typography.labelSmall,
-            color = MaterialTheme.colorScheme.onSurfaceVariant
-        )
-        Text(
-            text = stringResource(R.string.greeting_title),
-            style = MaterialTheme.typography.headlineLarge,
-            color = MaterialTheme.colorScheme.primary
-        )
-        Text(
-            text = stringResource(R.string.greeting_subtitle),
-            style = MaterialTheme.typography.bodyMedium,
-            color = MaterialTheme.colorScheme.onSurfaceVariant
-        )
-    }
-}
-
-/** Las tres cifras del resumen, en una sola fila. */
-@Composable
-private fun FilaResumen(resumen: ResumenGeneral) {
-    Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-        Cifra(
-            valor = resumen.totalCasos,
-            etiqueta = stringResource(R.string.home_total_cases),
-            modifier = Modifier.weight(1f)
-        )
-        Cifra(
-            valor = resumen.casosAbiertos,
-            etiqueta = stringResource(R.string.home_open_cases),
-            modifier = Modifier.weight(1f)
-        )
-        Cifra(
-            valor = resumen.totalEntrevistas,
-            etiqueta = stringResource(R.string.home_total_interviews),
-            modifier = Modifier.weight(1f)
-        )
-    }
-}
-
-/** Una cifra con su etiqueta debajo. */
-@Composable
-private fun Cifra(
-    valor: Int,
-    etiqueta: String,
-    modifier: Modifier = Modifier
+private fun TarjetaHero(
+    alCrearCaso: () -> Unit
 ) {
     Card(
-        modifier = modifier,
+        modifier = Modifier.fillMaxWidth(),
+        shape = RoundedCornerShape(24.dp),
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surface
+            containerColor = MaterialTheme.colorScheme.primaryContainer
         ),
-        elevation = CardDefaults.cardElevation(defaultElevation = 1.dp)
+        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
     ) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(vertical = 14.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
+                .padding(20.dp),
+            verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Surface(
+                    shape = RoundedCornerShape(50),
+                    color = MaterialTheme.colorScheme.primary.copy(alpha = 0.15f)
+                ) {
+                    Text(
+                        text = "${stringResource(R.string.app_name)} · ${stringResource(R.string.app_tagline)}",
+                        style = MaterialTheme.typography.labelSmall,
+                        fontWeight = FontWeight.SemiBold,
+                        color = MaterialTheme.colorScheme.primary,
+                        modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp)
+                    )
+                }
+            }
+
+            Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                Text(
+                    text = stringResource(R.string.greeting_title),
+                    style = MaterialTheme.typography.headlineLarge,
+                    fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colorScheme.onPrimaryContainer
+                )
+                Text(
+                    text = stringResource(R.string.greeting_subtitle),
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.85f)
+                )
+            }
+
+            Spacer(modifier = Modifier.height(4.dp))
+
+            Button(
+                onClick = alCrearCaso,
+                modifier = Modifier.fillMaxWidth(),
+                shape = RoundedCornerShape(16.dp),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = MaterialTheme.colorScheme.primary,
+                    contentColor = MaterialTheme.colorScheme.onPrimary
+                )
+            ) {
+                Icon(
+                    imageVector = Icons.Filled.Add,
+                    contentDescription = null,
+                    modifier = Modifier.size(20.dp)
+                )
+                Text(
+                    text = "  ${stringResource(R.string.home_new_case)}",
+                    style = MaterialTheme.typography.titleMedium,
+                    fontWeight = FontWeight.SemiBold
+                )
+            }
+        }
+    }
+}
+
+/** Sección de métricas generales de las investigaciones. */
+@Composable
+private fun SeccionMetricas(resumen: ResumenGeneral) {
+    Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
+        Text(
+            text = stringResource(R.string.home_stats),
+            style = MaterialTheme.typography.titleMedium,
+            fontWeight = FontWeight.Bold,
+            color = MaterialTheme.colorScheme.onSurface
+        )
+
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(10.dp)
+        ) {
+            TarjetaMetrica(
+                valor = resumen.totalCasos,
+                etiqueta = stringResource(R.string.home_total_cases),
+                icono = Icons.Filled.Folder,
+                modifier = Modifier.weight(1f)
+            )
+            TarjetaMetrica(
+                valor = resumen.casosAbiertos,
+                etiqueta = stringResource(R.string.home_open_cases),
+                icono = Icons.Filled.CalendarMonth,
+                modifier = Modifier.weight(1f)
+            )
+            TarjetaMetrica(
+                valor = resumen.totalEntrevistas,
+                etiqueta = stringResource(R.string.home_total_interviews),
+                icono = Icons.Filled.RecordVoiceOver,
+                modifier = Modifier.weight(1f)
+            )
+        }
+    }
+}
+
+/** Tarjeta individual para mostrar una cifra con su ícono y etiqueta. */
+@Composable
+private fun TarjetaMetrica(
+    valor: Int,
+    etiqueta: String,
+    icono: ImageVector,
+    modifier: Modifier = Modifier
+) {
+    Card(
+        modifier = modifier,
+        shape = RoundedCornerShape(18.dp),
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f)
+        ),
+        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(12.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(6.dp)
+        ) {
+            Box(
+                modifier = Modifier
+                    .size(36.dp)
+                    .clip(CircleShape)
+                    .background(MaterialTheme.colorScheme.primary.copy(alpha = 0.1f)),
+                contentAlignment = Alignment.Center
+            ) {
+                Icon(
+                    imageVector = icono,
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.primary,
+                    modifier = Modifier.size(18.dp)
+                )
+            }
+
             Text(
                 text = valor.toString(),
                 style = MaterialTheme.typography.headlineSmall,
                 fontWeight = FontWeight.Bold,
-                color = MaterialTheme.colorScheme.primary
+                color = MaterialTheme.colorScheme.onSurface
             )
+
             Text(
                 text = etiqueta,
                 style = MaterialTheme.typography.labelSmall,
@@ -152,17 +253,16 @@ private fun Cifra(
     }
 }
 
-/** Tarjeta grande con ícono, título y descripción, como en el mockup. */
+/** Tarjeta de acceso directo a la administración de casos. */
 @Composable
-private fun TarjetaAccion(
-    icono: ImageVector,
-    titulo: String,
-    descripcion: String,
-    alPulsar: () -> Unit
+private fun TarjetaAccionNavegacion(
+    totalCasos: Int,
+    alVerCasos: () -> Unit
 ) {
     Card(
-        onClick = alPulsar,
+        onClick = alVerCasos,
         modifier = Modifier.fillMaxWidth(),
+        shape = RoundedCornerShape(20.dp),
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surface
         ),
@@ -171,28 +271,64 @@ private fun TarjetaAccion(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(18.dp),
-            horizontalArrangement = Arrangement.spacedBy(16.dp),
+                .padding(16.dp),
+            horizontalArrangement = Arrangement.spacedBy(14.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Icon(
-                imageVector = icono,
-                contentDescription = null,
-                tint = MaterialTheme.colorScheme.secondary,
-                modifier = Modifier.size(32.dp)
-            )
-            Column(verticalArrangement = Arrangement.spacedBy(2.dp)) {
+            Surface(
+                shape = CircleShape,
+                color = MaterialTheme.colorScheme.secondaryContainer,
+                modifier = Modifier.size(48.dp)
+            ) {
+                Box(contentAlignment = Alignment.Center) {
+                    Icon(
+                        imageVector = Icons.AutoMirrored.Filled.ListAlt,
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.onSecondaryContainer,
+                        modifier = Modifier.size(24.dp)
+                    )
+                }
+            }
+
+            Column(
+                modifier = Modifier.weight(1f),
+                verticalArrangement = Arrangement.spacedBy(2.dp)
+            ) {
                 Text(
-                    text = titulo,
+                    text = stringResource(R.string.home_my_cases),
                     style = MaterialTheme.typography.titleMedium,
+                    fontWeight = FontWeight.SemiBold,
                     color = MaterialTheme.colorScheme.onSurface
                 )
                 Text(
-                    text = descripcion,
+                    text = stringResource(R.string.home_my_cases_hint),
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
+
+            Surface(
+                shape = RoundedCornerShape(50),
+                color = MaterialTheme.colorScheme.surfaceVariant
+            ) {
+                Text(
+                    text = if (totalCasos == 1) {
+                        stringResource(R.string.cases_interviews_count_one)
+                    } else {
+                        stringResource(R.string.cases_interviews_count, totalCasos).replace("entrevistas", "casos").replace("interviews", "cases")
+                    },
+                    style = MaterialTheme.typography.labelSmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    modifier = Modifier.padding(horizontal = 10.dp, vertical = 4.dp)
+                )
+            }
+
+            Icon(
+                imageVector = Icons.AutoMirrored.Filled.ArrowForward,
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                modifier = Modifier.size(20.dp)
+            )
         }
     }
 }

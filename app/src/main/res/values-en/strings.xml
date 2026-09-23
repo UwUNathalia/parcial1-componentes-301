@@ -49,8 +49,6 @@
     <string name="form_field_state">Status</string>
     <string name="form_error_title_required">Title is required</string>
     <string name="form_save">Save</string>
-    <string name="form_cancel">Cancel</string>
-    <string name="form_saved">Case saved</string>
 
     <!-- Case detail -->
     <string name="detail_tab_summary">Summary</string>
@@ -59,7 +57,6 @@
     <string name="detail_tab_evidence">Evidence</string>
     <string name="detail_description">Description</string>
     <string name="detail_no_description">No description.</string>
-    <string name="detail_change_state">Change status</string>
     <string name="detail_close_case">Close case</string>
     <string name="detail_reopen_case">Reopen case</string>
     <string name="detail_case_closed_notice">This case is closed. Reopen it to add information.</string>
@@ -100,5 +97,4 @@
     <string name="dialog_add">Add</string>
     <string name="dialog_save">Save</string>
     <string name="dialog_cancel">Cancel</string>
-    <string name="case_deleted">Case deleted</string>
 </resources>
