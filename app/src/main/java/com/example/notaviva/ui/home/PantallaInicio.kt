@@ -1,4 +1,4 @@
-@file:OptIn(androidx.compose.material3.ExperimentalMaterial3Api::class)
+@file:OptIn(ExperimentalMaterial3Api::class)
 
 package com.example.notaviva.ui.home
 
@@ -23,11 +23,13 @@ import androidx.compose.material.icons.automirrored.filled.ListAlt
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.CalendarMonth
 import androidx.compose.material.icons.filled.Folder
+import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.RecordVoiceOver
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -46,14 +48,7 @@ import com.example.notaviva.domain.model.EstadoCaso
 import com.example.notaviva.domain.model.ResumenGeneral
 import com.example.notaviva.ui.theme.NotaVivaTheme
 
-/**
- * Pantalla de inicio de la aplicación NotaViva.
- *
- * Diseñada como el panel de trabajo principal del periodista:
- * - Tarjeta de bienvenida con la acción prioritaria (crear caso).
- * - Indicadores clave de desempeño e investigaciones en curso.
- * - Acceso directo a la gestión de casos.
- */
+/** Pantalla de inicio de la aplicación NotaViva. */
 @Composable
 fun PantallaInicio(
     resumen: ResumenGeneral,
@@ -68,15 +63,12 @@ fun PantallaInicio(
             .padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        // Banner Hero de Trabajo
         TarjetaHero(
             alCrearCaso = alCrearCaso
         )
 
-        // Métrica de resumen
         SeccionMetricas(resumen = resumen)
 
-        // Acceso a Casos
         TarjetaAccionNavegacion(
             totalCasos = resumen.totalCasos,
             alVerCasos = alVerCasos
@@ -84,7 +76,6 @@ fun PantallaInicio(
     }
 }
 
-/** Tarjeta Hero principal con saludo, lema de la app y acción de crear caso. */
 @Composable
 private fun TarjetaHero(
     alCrearCaso: () -> Unit
@@ -162,7 +153,6 @@ private fun TarjetaHero(
     }
 }
 
-/** Sección de métricas generales de las investigaciones. */
 @Composable
 private fun SeccionMetricas(resumen: ResumenGeneral) {
     Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
@@ -189,6 +179,18 @@ private fun SeccionMetricas(resumen: ResumenGeneral) {
                 icono = Icons.Filled.CalendarMonth,
                 modifier = Modifier.weight(1f)
             )
+        }
+
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(10.dp)
+        ) {
+            TarjetaMetrica(
+                valor = resumen.casosCerrados,
+                etiqueta = stringResource(R.string.home_closed_cases),
+                icono = Icons.Filled.Lock,
+                modifier = Modifier.weight(1f)
+            )
             TarjetaMetrica(
                 valor = resumen.totalEntrevistas,
                 etiqueta = stringResource(R.string.home_total_interviews),
@@ -199,7 +201,6 @@ private fun SeccionMetricas(resumen: ResumenGeneral) {
     }
 }
 
-/** Tarjeta individual para mostrar una cifra con su ícono y etiqueta. */
 @Composable
 private fun TarjetaMetrica(
     valor: Int,
@@ -253,7 +254,6 @@ private fun TarjetaMetrica(
     }
 }
 
-/** Tarjeta de acceso directo a la administración de casos. */
 @Composable
 private fun TarjetaAccionNavegacion(
     totalCasos: Int,

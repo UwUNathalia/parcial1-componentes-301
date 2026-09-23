@@ -35,10 +35,7 @@ private val EsquemaOscuro = darkColorScheme(
     error = RojoError
 )
 
-/**
- * Tema de la aplicacion. Se adapta automaticamente al modo claro/oscuro del
- * sistema, igual que se adapta el idioma mediante los archivos de recursos.
- */
+/** Tema de la aplicación. */
 @Composable
 fun NotaVivaTheme(
     modoOscuro: Boolean = isSystemInDarkTheme(),

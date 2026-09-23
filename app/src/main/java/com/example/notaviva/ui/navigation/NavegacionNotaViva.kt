@@ -41,14 +41,7 @@ import com.example.notaviva.viewmodel.DetalleCasoViewModel
 import com.example.notaviva.viewmodel.Fabricas
 import com.example.notaviva.viewmodel.FormularioCasoViewModel
 
-/**
- * Grafo de navegación de la aplicación.
- *
- * Define qué pantalla corresponde a cada ruta y conecta cada una con su
- * ViewModel. Es el único punto donde las pantallas se enteran de que existen
- * las demás: cada pantalla recibe funciones como `alAbrirCaso` y no sabe a
- * dónde llevan.
- */
+/** Grafo de navegación de la aplicación. */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun NavegacionNotaViva(repositorio: RepositorioCasos) {
@@ -57,13 +50,9 @@ fun NavegacionNotaViva(repositorio: RepositorioCasos) {
     val rutaActual = entradaActual?.destination?.route
     val anfitrionMensajes = remember { SnackbarHostState() }
 
-    // El listado y el inicio comparten ViewModel para no leer dos veces lo
-    // mismo y para que las dos pantallas muestren siempre las mismas cifras.
     val casosViewModel: CasosViewModel = viewModel(factory = Fabricas.casos(repositorio))
     val estadoCasos by casosViewModel.estado.collectAsStateWithLifecycle()
 
-    // Al volver al inicio o al listado hay que releer: pudo crearse, editarse
-    // o eliminarse un caso en otra pantalla.
     LaunchedEffect(rutaActual) {
         if (rutaActual == Rutas.INICIO || rutaActual == Rutas.CASOS) {
             casosViewModel.cargar()
@@ -91,8 +80,6 @@ fun NavegacionNotaViva(repositorio: RepositorioCasos) {
                     rutaActual = rutaActual,
                     alNavegar = { ruta ->
                         navegador.navigate(ruta) {
-                            // Evita apilar copias de la misma pantalla cada vez
-                            // que se toca el botón de la barra inferior.
                             launchSingleTop = true
                             popUpTo(Rutas.INICIO)
                         }
@@ -152,7 +139,6 @@ fun NavegacionNotaViva(repositorio: RepositorioCasos) {
                 )
                 val estadoFormulario by formularioViewModel.estado.collectAsStateWithLifecycle()
 
-                // Cuando el ViewModel confirma el guardado, se vuelve atrás.
                 LaunchedEffect(estadoFormulario.guardado) {
                     if (estadoFormulario.guardado) navegador.popBackStack()
                 }
@@ -205,7 +191,7 @@ fun NavegacionNotaViva(repositorio: RepositorioCasos) {
     }
 }
 
-/** Barra inferior con las dos secciones principales. */
+/** Barra de navegación inferior de la aplicación. */
 @Composable
 private fun BarraInferior(
     rutaActual: String?,

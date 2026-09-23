@@ -51,23 +51,18 @@ class CasosViewModel(
         }
     }
 
-    /** El usuario escribió en el buscador. */
+    /** Actualiza la consulta de búsqueda. */
     fun buscar(consulta: String) {
         _estado.update { it.copy(consulta = consulta) }
         cargar()
     }
 
-    /**
-     * El usuario tocó un chip de filtro. Tocar el chip ya activo lo desactiva,
-     * que es lo que la gente espera de un filtro de este tipo.
-     */
     fun filtrarPor(estado: EstadoCaso?) {
         val nuevoFiltro = if (_estado.value.filtroEstado == estado) null else estado
         _estado.update { it.copy(filtroEstado = nuevoFiltro) }
         cargar()
     }
 
-    /** Elimina un caso y recarga la lista. */
     fun eliminarCaso(id: Long, mensajeExito: String) {
         viewModelScope.launch {
             if (repositorio.eliminarCaso(id)) {
@@ -77,7 +72,6 @@ class CasosViewModel(
         }
     }
 
-    /** Oculta el mensaje emergente una vez que el usuario lo vio. */
     fun mensajeMostrado() {
         _estado.update { it.copy(mensaje = null) }
     }

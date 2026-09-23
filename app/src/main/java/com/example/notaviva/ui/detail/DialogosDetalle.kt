@@ -23,12 +23,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.ui.unit.dp
 import com.example.notaviva.R
 
-/**
- * Diálogo para registrar una entrevista con sus hallazgos.
- *
- * El estado del formulario vive dentro del diálogo y no en el ViewModel,
- * porque se descarta al cerrarlo: no tiene sentido conservarlo.
- */
+/** Diálogo para registrar una entrevista. */
 @Composable
 fun DialogoNuevaEntrevista(
     alConfirmar: (nombre: String, rol: String, hallazgos: String, anonima: Boolean) -> Unit,
@@ -54,8 +49,6 @@ fun DialogoNuevaEntrevista(
                     },
                     label = { Text(stringResource(R.string.interview_field_name)) },
                     singleLine = true,
-                    // Una fuente anónima no lleva nombre, así que el campo se
-                    // desactiva en lugar de quedar pidiendo un dato inútil.
                     enabled = !anonima,
                     isError = error,
                     supportingText = {
@@ -120,12 +113,7 @@ fun DialogoNuevaEntrevista(
     )
 }
 
-/**
- * Diálogo para registrar una evidencia.
- *
- * El tipo (documento, imagen, audio, video) no se pregunta: se deduce de la
- * extensión del nombre del archivo.
- */
+/** Diálogo para registrar una evidencia. */
 @Composable
 fun DialogoNuevaEvidencia(
     alConfirmar: (nombre: String, tamanoKb: Long) -> Unit,
@@ -157,7 +145,6 @@ fun DialogoNuevaEvidencia(
                 )
                 OutlinedTextField(
                     value = tamano,
-                    // Se filtran las letras para no tener que validar después.
                     onValueChange = { nuevo -> tamano = nuevo.filter { it.isDigit() } },
                     label = { Text(stringResource(R.string.evidence_field_size)) },
                     singleLine = true,
@@ -188,7 +175,6 @@ fun DialogoNuevaEvidencia(
     )
 }
 
-/** Confirmación antes de borrar un caso, porque la acción no se puede deshacer. */
 @Composable
 fun DialogoConfirmarBorrado(
     alConfirmar: () -> Unit,

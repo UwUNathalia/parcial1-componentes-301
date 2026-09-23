@@ -6,15 +6,9 @@ import com.example.notaviva.data.local.ContratoNotaViva.TablaEvidencias
 import com.example.notaviva.domain.model.Evidencia
 import com.example.notaviva.domain.model.TipoEvidencia
 
-/**
- * Acceso a la tabla de evidencias.
- *
- * Aquí solo se guarda la ficha del archivo (nombre, tipo, tamaño y ruta),
- * nunca el contenido del archivo.
- */
+/** Acceso a la tabla de evidencias. */
 class EvidenciaDao(private val helper: NotaVivaDbHelper) {
 
-    /** Guarda una evidencia nueva y devuelve su id. */
     fun insertar(evidencia: Evidencia): Long =
         helper.writableDatabase.insert(
             TablaEvidencias.NOMBRE,
@@ -22,7 +16,6 @@ class EvidenciaDao(private val helper: NotaVivaDbHelper) {
             aContentValues(evidencia)
         )
 
-    /** Borra una evidencia por su id. */
     fun eliminar(id: Long): Int =
         helper.writableDatabase.delete(
             TablaEvidencias.NOMBRE,
@@ -30,7 +23,6 @@ class EvidenciaDao(private val helper: NotaVivaDbHelper) {
             arrayOf(id.toString())
         )
 
-    /** Evidencias de un caso, en el orden en que se agregaron. */
     fun obtenerPorCaso(casoId: Long): List<Evidencia> {
         val sql = """
             SELECT * FROM ${TablaEvidencias.NOMBRE}
@@ -46,7 +38,6 @@ class EvidenciaDao(private val helper: NotaVivaDbHelper) {
         return evidencias
     }
 
-    /** Cuántas evidencias tiene un caso. */
     fun contarPorCaso(casoId: Long): Int {
         val sql = """
             SELECT COUNT(*) FROM ${TablaEvidencias.NOMBRE}

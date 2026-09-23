@@ -1,4 +1,4 @@
-@file:OptIn(androidx.compose.material3.ExperimentalMaterial3Api::class)
+@file:OptIn(ExperimentalMaterial3Api::class)
 
 package com.example.notaviva.ui.cases
 
@@ -14,6 +14,7 @@ import androidx.compose.material.icons.filled.CalendarMonth
 import androidx.compose.material.icons.filled.RecordVoiceOver
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -21,6 +22,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
@@ -35,12 +37,7 @@ import com.example.notaviva.ui.components.formatoCorto
 import com.example.notaviva.ui.theme.NotaVivaTheme
 import java.time.LocalDate
 
-/**
- * Tarjeta de un caso en la lista de investigaciones.
- *
- * Muestra el título, tema, fecha, estado y conteo de entrevistas
- * con una estética moderna de bordes redondeados (20.dp) y badges elegantes.
- */
+/** Tarjeta de un caso en la lista de investigaciones. */
 @Composable
 fun TarjetaCaso(
     casoConResumen: CasoConResumen,
@@ -121,10 +118,9 @@ fun TarjetaCaso(
     }
 }
 
-/** Pill indicadora pequeña con ícono y texto para metadatos. */
 @Composable
 private fun DatoPill(
-    icono: androidx.compose.ui.graphics.vector.ImageVector,
+    icono: ImageVector,
     texto: String
 ) {
     Surface(

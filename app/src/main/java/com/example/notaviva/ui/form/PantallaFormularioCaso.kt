@@ -39,9 +39,7 @@ import com.example.notaviva.ui.components.formatoCorto
 import com.example.notaviva.viewmodel.EstadoFormularioCaso
 import java.time.LocalDate
 
-/**
- * Formulario estilizado para crear y editar un caso.
- */
+/** Formulario para crear y editar un caso. */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PantallaFormularioCaso(

@@ -44,7 +44,6 @@ class RepositorioFalso : RepositorioCasos {
     }
 
     override suspend fun eliminarCaso(id: Long): Boolean {
-        // Se imita el borrado en cascada del esquema de SQLite.
         entrevistas.removeAll { it.casoId == id }
         evidencias.removeAll { it.casoId == id }
         return casos.removeAll { it.id == id }

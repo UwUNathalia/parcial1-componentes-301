@@ -75,7 +75,6 @@ class ModelosTest {
 
     @Test
     fun `un estado desconocido en la base de datos no rompe la aplicacion`() {
-        // Puede pasar si la base de datos quedó de una versión anterior.
         assertEquals(EstadoCaso.EN_INVESTIGACION, EstadoCaso.desdeNombre("BASURA"))
         assertEquals(EstadoCaso.EN_INVESTIGACION, EstadoCaso.desdeNombre(null))
         assertEquals(EstadoCaso.PUBLICADO, EstadoCaso.desdeNombre("PUBLICADO"))

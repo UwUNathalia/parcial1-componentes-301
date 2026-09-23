@@ -4,15 +4,7 @@ import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 
-/**
- * Administra el archivo de base de datos de la aplicación.
- *
- * [SQLiteOpenHelper] se encarga de crear la base de datos la primera vez que
- * se abre y de aplicar las migraciones cuando cambia [VERSION].
- *
- * @param context contexto de la aplicación. Se usa `applicationContext` para
- *   no retener una Activity y provocar una fuga de memoria.
- */
+/** Administra el archivo de base de datos de la aplicación. */
 class NotaVivaDbHelper(context: Context) : SQLiteOpenHelper(
     context.applicationContext,
     NOMBRE_BD,
@@ -20,13 +12,7 @@ class NotaVivaDbHelper(context: Context) : SQLiteOpenHelper(
     VERSION
 ) {
 
-    /**
-     * Se llama antes de cada apertura de la base de datos.
-     *
-     * SQLite trae las llaves foráneas desactivadas por omisión, así que hay que
-     * encenderlas para que funcione el borrado en cascada de entrevistas y
-     * evidencias cuando se elimina un caso.
-     */
+
     override fun onConfigure(db: SQLiteDatabase) {
         super.onConfigure(db)
         db.setForeignKeyConstraintsEnabled(true)
@@ -40,14 +26,7 @@ class NotaVivaDbHelper(context: Context) : SQLiteOpenHelper(
         db.execSQL(ContratoNotaViva.CREAR_INDICE_TITULO)
     }
 
-    /**
-     * Migración entre versiones del esquema.
-     *
-     * Esta aplicación guarda información que el usuario puede volver a
-     * registrar, así que la estrategia es recrear las tablas. En una
-     * aplicación de producción aquí irían sentencias `ALTER TABLE` para no
-     * perder los datos del usuario.
-     */
+    /** Migración entre versiones del esquema. */
     override fun onUpgrade(db: SQLiteDatabase, versionAnterior: Int, versionNueva: Int) {
         db.execSQL(ContratoNotaViva.TablaEvidencias.ELIMINAR)
         db.execSQL(ContratoNotaViva.TablaEntrevistas.ELIMINAR)

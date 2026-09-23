@@ -14,6 +14,7 @@
     <string name="home_stats">Estadísticas</string>
     <string name="home_stats_hint">Entrevistas, casos y avances</string>
     <string name="home_open_cases">Casos abiertos</string>
+    <string name="home_closed_cases">Casos cerrados</string>
     <string name="home_total_cases">Casos</string>
     <string name="home_total_interviews">Entrevistas</string>
 
